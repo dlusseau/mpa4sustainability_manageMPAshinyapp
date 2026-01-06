@@ -26,9 +26,9 @@ In the interim, the full method and data sources  is available to download as a 
 - **MPA metadata (`mpa_metadata.csv`)**: Contains MPA identifiers, country, name, and two risk metrics:
   - `risk_richness`: how many conservation risks are present (breadth).
   - `risk_complexity`: how diverse/complex those risks are (entropy-like measure).
-- **Risk simulation (`mpa_risk_df.csv`)**: A data matrix used by the `actions()` function to recompute risk richness/complexity when one activity is removed.
+- **Risk simulation (`mpa_risk_df.csv`)**: A data matrix used by the `actions()` function to recompute biodiversity conservation risk richness/complexity when one activity is removed.
 
-> **Important:** Read the project documentation before interpreting results. This app was created as part of the **Biodiversa project mpa4sustainability**, using data collated over 2021–2023.
+> **Important:** Read the project documentation before interpreting results. This app was created as part of the **Biodiversa+ project mpa4sustainability**, using data collated over 2021–2023.
 
 ---
 
@@ -37,36 +37,37 @@ In the interim, the full method and data sources  is available to download as a 
 ### 1) **Networks**
 - Use the sidebar to select a **Country** and then an **MPA**.
 - The network shows:
-  - **Species groups** (white nodes, type = `TRUE`)
-  - **Activities** (grey nodes, type = `FALSE`)
+  - **Species groups** (white nodes) - these are [ISSCAAP](https://www.fao.org/fishery/static/ASFIS/ISSCAAP.pdf) taxonomic groups, the species name of the group can be at time quite different from all species represented in the group.
+  - **Activities** (grey nodes) - these are activity groups that can be related to conservation threats categories used in the IUCN Red List classification
   - **Edges**: 
-    - **Blue** = positive (ecosystem services provisioning / receiving)
-    - **Orange** = negative (conservation threats)
+    - **Blue** = ecosystem services provisioning / receiving
+    - **Orange** = conservation threats
+    - **weight** = proportion of the species, out of all species assessed in the taxonomic group, that produces ecosystem services or is threatened by exposure to the activities.
   - Edge **width** scales with |weight|.
-- Controls:
-  - Filter edges by **sign** and **min |weight|**.
-  - Toggle **labels** and **physics**.
-  - **Focus** on a node using the search.
+
 - Beneath the graph you’ll see **risk badges** for the selected MPA:
-  - The current **risk richness** and **risk complexity** values.
+  - The current biodiversity conservation **risk richness** and **risk complexity** values (see methods).
   - Their **percentile ranks** compared to all MPAs in the dataset.
 
 ### 2) **Network analysis**
 - Two bar charts split by node type:
-  - **Species (TRUE)**: 
+  - **Species groups**: 
     - **Blue** = out-strength (services provided to activities)
     - **Red**  = in-strength (threats from activities)
-  - **Activities (FALSE)**:
+  - **Activities**:
     - **Blue** = in-strength (services received from species)
     - **Red**  = out-strength (threats to species)
-- You can optionally view **absolute strengths** and limit plots to **top K** nodes for readability.
+- You can optionally limit plots to **top K** nodes for readability.
+
+In-strength is the sum of the weights of all links arriving to a node. Out-strength is the sum of the weights of all links departing a node.
 
 ### 3) **Management simulations**
-- Click **Run simulations** to evaluate removal of each activity (one at a time).
+- Click **Run simulations** to evaluate the effect of removing of each activity (one at a time).
 - Three outputs:
   - **Richness barplot**: the **new richness** value (or its **percentile rank**) after removing each activity, with a dashed baseline line.
   - **Complexity barplot**: the **new complexity** value (or **percentile rank**), with baseline.
-  - **Change in activity in-degree sum (Δ)**: the change in the total **in-degree** across activity nodes when one activity is removed.
+  - **Change in Ecosystem service provision (in-degree sum - Δ)**: the change in the total **in-degree** across activity nodes when one activity is removed.This corresponds to potential loss of ecosystem service provision if an activity is removed.
+  
 - Display mode:
   - **New values**: shows recomputed richness/complexity.
   - **Quantile rank (%)**: converts new values into percentile ranks against all MPAs.
@@ -78,47 +79,43 @@ In the interim, the full method and data sources  is available to download as a 
   - The **species group** contributing the most **ecosystem services** (largest out-strength among species).
   - The **activity** that receives the most **ecosystem services** (largest in-strength).
   - The **activity** producing the most **conservation threats** (largest out-strength).
+    
   - Management focus:
     - Which activity’s removal yields the **lowest new richness**.
     - Which activity’s removal yields the **lowest new complexity**.
+    
   - A caution list of activities with highest **in-strength** (services received), indicating potential trade-offs if restricting them.
 
 ---
 
 ## Interpreting results
 
-- **Signed vs absolute strengths**: 
-  - Signed strengths preserve directionality (services vs threats).  
-  - Absolute strengths summarize magnitude regardless of sign.
 - **Percentile ranks**: 
   - Ranks are empirical percentiles across all MPAs in the dataset.
-  - A “top 10%” rank indicates higher relative risk compared to peers.
+  - A high percentile rank indicates higher relative risk (richness or complexity) compared to peers.
 - **Simulations**:
   - Activity removal is simulated **one activity at a time** (no multi-activity interactions).
-  - Results depend on how activities map to the risk matrix; ensure activity names align.
+  - Results depend on how activities map to the risk matrix
 
 ---
 
 ## Tips & troubleshooting
 
-- If the network doesn’t render:
-  - Check that `mpa_id` in metadata matches names of `SEnetworks`.
-  - Ensure edges have a `weight` attribute.
-- If simulations don’t run:
-  - Confirm `mpa_risk_df.csv` exists and contains the selected `mpa_id`.
-  - Activity names must match the function’s **netactivities** mapping.
-- For large MPAs:
-  - Use the **min |weight|** slider to reduce clutter.
-  - Try **physics off** for a stable layout.
+- For any issues contact David Lusseau (davlu@dtu.dk)
+
+- If you change the data files in a local copy of the app the following issues may arise:
+  - If the network doesn’t render:
+    - Check that `mpa_id` in metadata matches names of `SEnetworks`.
+    - Ensure edges have a `weight` attribute.
+  - If simulations don’t run:
+    - Confirm `mpa_risk_df.csv` exists and contains the selected `mpa_id`.
+    - Activity names must match the function’s **netactivities** mapping.
+- The simplest action to redress those issues is to redownload the app (these will not arise if you use the app online)
 
 ---
 
 ## Reproducibility & export
 
-- You can download:
-  - Current **nodes and edges** tables (Networks tab).
-  - **Strengths** table (Network analysis tab).
-  - **Simulation results** (Management simulations tab).
 - Consider saving your selections (country, MPA) and display settings for consistent reporting.
 
 ---
@@ -126,4 +123,4 @@ In the interim, the full method and data sources  is available to download as a 
 ## Contact
 
 For queries, comments or interest: **David Lusseau (davlu@dtu.dk)**.  
-Office location: Kgs. Lyngby.
+Office location: Technical University of Denmark, Denmark
