@@ -1,0 +1,129 @@
+<!--
+---
+title: "How to use"
+author: "David Lusseau (mpa4sustainability)"
+date: "2026-01-06"
+output: html_document
+---
+-->
+
+# How to use this app
+
+Welcome to the **MPA management Explorer**.  
+
+This application lets you explore how human activities occurring in Marine Protected Areas (MPAs) relate to biodiversity conservation risks, and simulate potential management actions. 
+
+This information was generated using public data about human activities at sea, global estimates of species distribution, and conservation assessment listed in the IUCN Red List. Risk was estimated from an understanding of Vulnerabilities and Hazards at each MPA site derived from this information. For a full detail of the methodological approach to estimate the occurence of species and activities and to estimate vulnerability, hazard, and risk we refer you to an upcoming publication [doi to be inserted here once available].  
+In the interim, the full method and data sources  is available to download as a pdf [here](docs/methods_and_data_sources.pdf).
+
+
+
+---
+
+## What this app uses
+
+- **SEnetworks (Nov 2024)**: A named list of bipartite graphs (activities ↔ species groups) for ~15,971 MPAs.
+- **MPA metadata (`mpa_metadata.csv`)**: Contains MPA identifiers, country, name, and two risk metrics:
+  - `risk_richness`: how many conservation risks are present (breadth).
+  - `risk_complexity`: how diverse/complex those risks are (entropy-like measure).
+- **Risk simulation (`mpa_risk_df.csv`)**: A data matrix used by the `actions()` function to recompute risk richness/complexity when one activity is removed.
+
+> **Important:** Read the project documentation before interpreting results. This app was created as part of the **Biodiversa project mpa4sustainability**, using data collated over 2021–2023.
+
+---
+
+## Navigating the app
+
+### 1) **Networks**
+- Use the sidebar to select a **Country** and then an **MPA**.
+- The network shows:
+  - **Species groups** (white nodes, type = `TRUE`)
+  - **Activities** (grey nodes, type = `FALSE`)
+  - **Edges**: 
+    - **Blue** = positive (ecosystem services provisioning / receiving)
+    - **Orange** = negative (conservation threats)
+  - Edge **width** scales with |weight|.
+- Controls:
+  - Filter edges by **sign** and **min |weight|**.
+  - Toggle **labels** and **physics**.
+  - **Focus** on a node using the search.
+- Beneath the graph you’ll see **risk badges** for the selected MPA:
+  - The current **risk richness** and **risk complexity** values.
+  - Their **percentile ranks** compared to all MPAs in the dataset.
+
+### 2) **Network analysis**
+- Two bar charts split by node type:
+  - **Species (TRUE)**: 
+    - **Blue** = out-strength (services provided to activities)
+    - **Red**  = in-strength (threats from activities)
+  - **Activities (FALSE)**:
+    - **Blue** = in-strength (services received from species)
+    - **Red**  = out-strength (threats to species)
+- You can optionally view **absolute strengths** and limit plots to **top K** nodes for readability.
+
+### 3) **Management simulations**
+- Click **Run simulations** to evaluate removal of each activity (one at a time).
+- Three outputs:
+  - **Richness barplot**: the **new richness** value (or its **percentile rank**) after removing each activity, with a dashed baseline line.
+  - **Complexity barplot**: the **new complexity** value (or **percentile rank**), with baseline.
+  - **Change in activity in-degree sum (Δ)**: the change in the total **in-degree** across activity nodes when one activity is removed.
+- Display mode:
+  - **New values**: shows recomputed richness/complexity.
+  - **Quantile rank (%)**: converts new values into percentile ranks against all MPAs.
+- You can **sort bars** by display value and **download** the simulation results.
+
+### 4) **Summary of findings**
+- Generates badges summarizing:
+  - How many activities occur in the selected MPA and where it ranks in **risk richness** and **risk complexity** (percentiles).
+  - The **species group** contributing the most **ecosystem services** (largest out-strength among species).
+  - The **activity** that receives the most **ecosystem services** (largest in-strength).
+  - The **activity** producing the most **conservation threats** (largest out-strength).
+  - Management focus:
+    - Which activity’s removal yields the **lowest new richness**.
+    - Which activity’s removal yields the **lowest new complexity**.
+  - A caution list of activities with highest **in-strength** (services received), indicating potential trade-offs if restricting them.
+
+---
+
+## Interpreting results
+
+- **Signed vs absolute strengths**: 
+  - Signed strengths preserve directionality (services vs threats).  
+  - Absolute strengths summarize magnitude regardless of sign.
+- **Percentile ranks**: 
+  - Ranks are empirical percentiles across all MPAs in the dataset.
+  - A “top 10%” rank indicates higher relative risk compared to peers.
+- **Simulations**:
+  - Activity removal is simulated **one activity at a time** (no multi-activity interactions).
+  - Results depend on how activities map to the risk matrix; ensure activity names align.
+
+---
+
+## Tips & troubleshooting
+
+- If the network doesn’t render:
+  - Check that `mpa_id` in metadata matches names of `SEnetworks`.
+  - Ensure edges have a `weight` attribute.
+- If simulations don’t run:
+  - Confirm `mpa_risk_df.csv` exists and contains the selected `mpa_id`.
+  - Activity names must match the function’s **netactivities** mapping.
+- For large MPAs:
+  - Use the **min |weight|** slider to reduce clutter.
+  - Try **physics off** for a stable layout.
+
+---
+
+## Reproducibility & export
+
+- You can download:
+  - Current **nodes and edges** tables (Networks tab).
+  - **Strengths** table (Network analysis tab).
+  - **Simulation results** (Management simulations tab).
+- Consider saving your selections (country, MPA) and display settings for consistent reporting.
+
+---
+
+## Contact
+
+For queries, comments or interest: **David Lusseau (davlu@dtu.dk)**.  
+Office location: Kgs. Lyngby.
