@@ -15,11 +15,12 @@ suppressPackageStartupMessages({
 
 load_network_data <- function(pathnet = "data/SEnetworks_Nov2024.Rdata",pathmeta="data/mpa_metadata.csv") {
   
-  network <- load(pathnet)
+  env <- new.env(parent = emptyenv())
+  obj_names <- load(pathnet, envir = env)
+  SEnetworks <- env$SEnetworks
+  
   idx_name<-names(SEnetworks)
   
-  networks_list <- get(networks, envir = .GlobalEnv)
-
   metadata <<- fread(pathmeta)
     
   # Build or validate the index
