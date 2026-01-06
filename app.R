@@ -839,8 +839,8 @@ server <- function(input, output, session) {
     # Strength-based leaders (unchanged parts)
     df <- summary_strength_df()
         # Activities table
-    df_act <- df %>% dplyr::filter(!isTRUE(type_logical))
-    bb_list <- head(df_act$node[order(df_act$in_strength, decreasing = TRUE)], 3)
+    df_act <- df %>% dplyr::filter(!(type_logical))
+    bb_list <- head(df_act$node[order(df_act$in_strength, decreasing = TRUE)], 2)
     
     bb_text <- if (length(bb_list)) paste(bb_list, collapse = ", ") else "NA"
     

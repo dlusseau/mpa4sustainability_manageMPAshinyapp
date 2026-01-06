@@ -13,7 +13,7 @@ Welcome to the **MPA management Explorer**.
 
 This application lets you explore how human activities occurring in Marine Protected Areas (MPAs) relate to biodiversity conservation risks, and simulate potential management actions. 
 
-This information was generated using public data about human activities at sea, global estimates of species distribution, and conservation assessment listed in the IUCN Red List. Risk was estimated from an understanding of Vulnerabilities and Hazards at each MPA site derived from this information. For a full detail of the methodological approach to estimate the occurence of species and activities and to estimate vulnerability, hazard, and risk we refer you to an upcoming publication [doi to be inserted here once available].  
+This information was generated using public data about human activities at sea, global estimates of species distribution, and conservation assessment listed in the IUCN Red List. Risk was estimated from an understanding of Vulnerabilities and Hazards at each MPA site derived from this information. For a full detail of the methodological approach to estimate the occurrence of species and activities and to estimate vulnerability, hazard, and risk we refer you to an upcoming publication [doi to be inserted here once available].  
 In the interim, the full method and data sources are available to download as [a pdf here](methods_and_data_sources.pdf). The MPA-level data, including intersections with public data describing human activities and species presence, is available on the [project github page](https://github.com/dlusseau/mpa4sustainability/tree/main/WP1/data).
 
 
