@@ -72,7 +72,7 @@ ui <- page_navbar(
         # Country first
         selectizeInput(
           inputId = "country",
-          label   = "Country",
+          label   = "Nation or autonomous region",
           choices = NULL,  # filled at server start
           multiple = FALSE,
           options = list(placeholder = "Start typing a country",
