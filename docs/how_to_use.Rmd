@@ -98,7 +98,47 @@ In-strength is the sum of the weights of all links arriving to a node. Out-stren
   - Results depend on how activities map to the risk matrix
 
 ---
+## the data in short
 
+#### Marine Protected Areas (MPA - file mpa_metadata.csv)
+- **mpa**: the MPA and their characteristics come from the WDPA MPA data
+in addition this file contains key characteristics from WDPA (nation designating mpas, mpa type, mpa name etc) used in the app
+- **risk richness**: the biodiversity conservation risk richness of the MPA
+- **risk complexity**: the biodiversity conservation risk complexity of the MPA
+
+
+---
+
+#### SEnetworks (file SEnetworks_Nov2024)
+- A list in which each element is an igraph object containing the network for one MPA  
+- 15,971 elements for 15,971 MPAs (MPAs for which a network could be estimated out of the 17200 listed in WDPA)  
+- Each list element is named after its MPA WDPA ID  
+
+**Graph attributes:**
+- Graphs are bipartite (`V(g)$type`)  
+- Vertex color: white = species group, gray = activities  
+- Vertex size: homogeneous  
+- Edge weight: absolute value of edge_list weight × 10  
+- Edge sign: sign of edge_list weight  
+- Edge color: blue for positive, orange for negative  
+- Edge width: edge weight  
+- Edge arrow size: 1/10 of edge weight  
+
+---
+
+### Definition of networks 
+- **node type**: two node types - species and activities 
+- **species**: regrouped as 34 taxonomic groups (ISSCAAP classification) see ISSCAAP for details - the name given to the category does not necessarily describes well all species in the category, but the categories are taxonomically robust
+- **human activities**: regrouped as 24 activities
+- **from**: the node from which the edge emerges
+- **to**: the node receiving the edge  
+- **weight**: the weight of the edge (the proportion of the ISSCAAP species group to which the edge is attributed)  
+
+The weight can be:
+- **Positive**: goods and services contributions from species to activities (via food provisioning and cultural ecosystem services only at this stage)  
+- **Negative**: activities threaten the conservation status of species (as noted in the IUCN Red List Conservation Assessment for the species)  
+
+---
 ## Tips & troubleshooting
 
 - For any issues contact David Lusseau (davlu@dtu.dk)

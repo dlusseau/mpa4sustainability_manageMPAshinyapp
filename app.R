@@ -61,7 +61,85 @@ ui <- page_navbar(
   .summary-tile.warning   .title { color: #6C7A89; }    /* grey */
 ")),
   
+
   
+  #--- beginning TABs: explainers
+  nav_panel("About", 
+            card(
+              card_header("About the data"),
+              card_body(
+                
+                markdown("
+
+
+
+### Welcome to the **MPA management Explorer**.  
+
+This application lets you explore how human activities occurring in Marine Protected Areas (MPAs) relate to biodiversity conservation risks, and simulate potential management actions. 
+
+This information was generated using public data about human activities at sea, global estimates of species distribution, and conservation assessment listed in the IUCN Red List. Risk was estimated from an understanding of Vulnerabilities and Hazards at each MPA site derived from this information. For a full detail of the methodological approach to estimate the occurrence of species and activities and to estimate vulnerability, hazard, and risk we refer you to an upcoming publication [doi to be inserted here once available].  
+In the interim, the full method and data sources are available to download as [a pdf here](methods_and_data_sources.pdf). The MPA-level data, including intersections with public data describing human activities and species presence, is available on the [project github page](https://github.com/dlusseau/mpa4sustainability/tree/main/WP1/data).
+
+---
+
+#### How to use this app
+Please read the 'How to Use' Tab before starting using this app. 
+
+Once you have done so, please select the MPA on which you want to focus in the Networks TAB.this will provide you with an understanding of the interaction between large taxonomic group of species present in this MPA and the human activities that have been observed there.
+The interactions are of two types: whether the activity is a conservatio nthreat for some species in the taxonomic group (orange line), and whether the species contributes ecosystem services (through fishing and tourism only at this stage - blue line)
+
+This will give you an uderstanding of how much conservation risk you have to manage and how complex this risk landscape is.
+
+Then use the network analysis TAB to understand the contribution of species groups and activities to these measures
+
+Finally use the Management simulations TAB to simulate restrictions of human activities and observe which management actions can best reduce conservatoin risks.
+the summary of findings TAB then provides you with text to explain these results.
+
+
+
+---
+#### This App was created as part of the Biodiversa+ project mpa4sustainability.  
+  
+The project was funded through the 2020-2021 Biodiversa+ and Water JPI joint call for research projects, 
+under the BiodivRestore ERA-NET Cofund (GA N°101003777), with the EU and the funding organisations Innovation Fund Denmark, 
+Fundação para a Ciênca e a Tecnologia, Swedish Environmental Protection Agency, Agence Nationale de la Recherche, Agencia Estatal de Investigación.  
+
+---
+
+#### Disclaimer  
+
+The estimates provided in this app are based on global data analyses. This provides a mean to have a harmonised overview of mpa usage (by people and nature)
+across the globe, In some regions of the world, more precise information and data may be available for the MPA in which you are interested (e.g., species distribution and density or fishing intensity). 
+We therefore recommend that you use this app for intial guidance of mpa management. Feel free to contact the mpa4sustainability team (davlu@dtu.dk) for further guidance. 
+Detailed MPA management plan development should involve all local stakeholders and scientists with local knowledge of the ecology of your site.
+
+
+    ")
+              )
+            )
+  ),
+  
+  
+  
+  
+  # --- Tab: How to use this app (loads external Markdown) -----------------------
+  nav_panel(
+    "How to use this app",
+    layout_columns(
+      col_widths = c(12),
+      card(
+        card_header("How to use this app"),
+        card_body(
+          # bslib::markdown can load a file path directly
+          markdown(read_file("docs/how_to_use.Rmd"))
+        )
+      )
+    )
+  ),
+  
+
+
+
   
   # Tab 1: Networks (the one we implement now)
   nav_panel(
@@ -196,103 +274,12 @@ ui <- page_navbar(
         )
       )
     )
-  ),
+  )
   
   
     
   # Placeholder for more tabs you’ll add later
-  
-  #--- end TABs: explainers
-  nav_panel("About", 
-      card(
-       card_header("About the data"),
-       card_body(
-         
-         markdown("
-## This App was created as part of the Biodiversa+ project mpa4sustainability.  
-  
-The project was funded through the 2020-2021 Biodiversa+ and Water JPI joint call for research projects, 
-under the BiodivRestore ERA-NET Cofund (GA N°101003777), with the EU and the funding organisations Innovation Fund Denmark, 
-Fundação para a Ciênca e a Tecnologia, Swedish Environmental Protection Agency, Agence Nationale de la Recherche, Agencia Estatal de Investigación.  
-
----
-
-#### Disclaimer  
-
-The estimates provided in this app are based on global data analyses. This provides a mean to have a harmonised overview of mpa usage (by people and nature)
-across the globe, In some regions of the world, more precise information and data may be available for the MPA in which you are interested (e.g., species distribution and density or fishing intensity). 
-We therefore recommend that you use this app for intial guidance of mpa management. Feel free to contact the mpa4sustainability team (davlu@dtu.dk) for further guidance. 
-Detailed MPA management plan development should involve all local stakeholders and scientists with local knowledge of the ecology of your site.
-
----
-
-#### How to use this app
-Please read the 'How to Use' Tab before starting using this app. 
-
----
-
-#### Marine Protected Areas (MPA - file mpa_metadata.csv)
-- **mpa**: the MPA and their characteristics come from the WDPA MPA data
-in addition this file contains key characteristics from WDPA (nation designating mpas, mpa type, mpa name etc) used in the app
-- **risk richness**: the biodiversity conservation risk richness of the MPA
-- **risk complexity**: the biodiversity conservation risk complexity of the MPA
-
-
----
-
-#### SEnetworks (file SEnetworks_Nov2024)
-- A list in which each element is an igraph object containing the network for one MPA  
-- 15,971 elements for 15,971 MPAs (MPAs for which a network could be estimated out of the 17200 listed in WDPA)  
-- Each list element is named after its MPA WDPA ID  
-
-**Graph attributes:**
-- Graphs are bipartite (`V(g)$type`)  
-- Vertex color: white = species group, gray = activities  
-- Vertex size: homogeneous  
-- Edge weight: absolute value of edge_list weight × 10  
-- Edge sign: sign of edge_list weight  
-- Edge color: blue for positive, orange for negative  
-- Edge width: edge weight  
-- Edge arrow size: 1/10 of edge weight  
-
----
-
-### Definition of networks 
-- **node type**: two node types - species and activities 
-- **species**: regrouped as 34 taxonomic groups (ISSCAAP classification) see ISSCAAP for details - the name given to the category does not necessarily describes well all species in the category, but the categories are taxonomically robust
-- **human activities**: regrouped as 24 activities
-- **from**: the node from which the edge emerges
-- **to**: the node receiving the edge  
-- **weight**: the weight of the edge (the proportion of the ISSCAAP species group to which the edge is attributed)  
-
-The weight can be:
-- **Positive**: goods and services contributions from species to activities (via food provisioning and cultural ecosystem services only at this stage)  
-- **Negative**: activities threaten the conservation status of species (as noted in the IUCN Red List Conservation Assessment for the species)  
-    ")
-       )
-      )
-  ),
-  
-  
-  
-  
-  # --- Tab: How to use this app (loads external Markdown) -----------------------
-  nav_panel(
-    "How to use this app",
-    layout_columns(
-      col_widths = c(12),
-      card(
-        card_header("How to use this app"),
-        card_body(
-          # bslib::markdown can load a file path directly
-          markdown(read_file("docs/how_to_use.Rmd"))
-        )
-      )
-    )
-  )
-  
 )
-
 
 # Numeric percentile of "riskiness" (0..100). Higher = riskier (if higher_is_risk = TRUE).
 rank_percent <- function(value, all_values, higher_is_risk = TRUE) {
